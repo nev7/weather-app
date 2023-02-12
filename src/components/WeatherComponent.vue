@@ -1,45 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { client } from "@/httpClient/client";
+import type { Ref } from "vue";
+import type { CurrentWeather, CurrentLocation } from "@/types/weatherApiTypes";
 import CustomButton from "@/components/Button/CustomButton.vue";
 import WeatherIcons from "@/components/WeatherIcons.vue";
 
-const options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0,
-};
 const city = ref("");
-const currLat = ref("");
-const currLon = ref("");
-const currWeather: any = ref({});
-const currLocation: any = ref({});
+const currWeather = ref({}) as Ref<CurrentWeather>;
+const currLocation = ref({}) as Ref<CurrentLocation>;
+const weatherApiError = ref(null);
 
-const success = async (pos: any) => {
-  currLat.value = pos.coords.latitude;
-  currLon.value = pos.coords.longitude;
-
-  const fetchWeather = await client.getRequest(
-    `http://api.weatherapi.com/v1/current.json?key=68fded281632440e9ab154847223112&q=${currLat.value},${currLon.value}`,
-    {}
-  );
-  fetchWeather.json().then((res) => {
-    currWeather.value = res.current;
-    currLocation.value = res.location;
-  });
-};
-const error = (err: any) => {
-  console.error(`ERROR(${err.code}): ${err.message}`);
-};
-navigator.geolocation.getCurrentPosition(success, error, options);
-
-const getLocalTime = (dateStr: string) => {
-  const date = new Date(dateStr);
-  const hours = date.getHours();
-  const minutes =
-    date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-  return `${hours}:${minutes}`;
-};
 const getWeatherByCity = async () => {
   if (city.value) {
     const fetchWeather = await client.getRequest(
@@ -48,10 +19,13 @@ const getWeatherByCity = async () => {
       }&q=${city.value}`,
       {}
     );
-    fetchWeather.json().then((res) => {
-      currWeather.value = res.current;
-      currLocation.value = res.location;
-    });
+    fetchWeather
+      .json()
+      .then((res) => {
+        currWeather.value = res.current;
+        currLocation.value = res.location;
+      })
+      .catch((error) => (weatherApiError.value = error));
     return fetchWeather;
   }
   return false;
