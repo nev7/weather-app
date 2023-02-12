@@ -28,11 +28,13 @@ const getWeatherByCity = async () => {
       .catch((error) => (weatherApiError.value = error));
     return fetchWeather;
   }
+  //TODO handle empty input search
   return false;
 };
 </script>
 
 <template>
+  <!--TODO Add error/dummy component when no result is shown -->
   <div class="weather-component d-flex">
     <div class="d-flex flex-row w-100 search-box mb-2">
       <input
