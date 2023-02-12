@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import ClearWeatherIcon from "./ClearWeatherIcon.vue";
-import PartialyCloudyIcon from "./PartialyCloudyIcon.vue";
-import CloudyIcon from "./CloudyIcon.vue";
-import RainIcon from "./RainIcon.vue";
-import SunnyIcon from "./SunnyIcon.vue";
+import ClearWeatherIcon from "@/icons/ClearIcon.vue";
+import PartialyCloudyIcon from "@/icons/PartialyCloudyIcon.vue";
+import CloudyIcon from "@/icons/CloudyIcon.vue";
+import RainIcon from "@/icons/RainIcon.vue";
+import SunnyIcon from "@/icons/SunnyIcon.vue";
+import MistIcon from "@/icons/MistIcon.vue";
 
 defineProps({
   weatherCondition: {
@@ -16,6 +17,7 @@ defineProps({
   <SunnyIcon
     v-if="weatherCondition.code === 1000 && weatherCondition.text === 'Sunny'"
   />
+  <MistIcon v-if="weatherCondition.code === 1030" />
   <RainIcon v-else-if="weatherCondition.code === 1183" />
   <CloudyIcon v-else-if="weatherCondition.code === 1009" />
   <ClearWeatherIcon

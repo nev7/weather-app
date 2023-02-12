@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { client } from "@/httpClient/client";
 import CustomButton from "@/components/Button/CustomButton.vue";
-import WeatherIcons from "@/icons/WeatherIcons.vue";
+import WeatherIcons from "@/components/WeatherIcons.vue";
 
 const options = {
   enableHighAccuracy: true,
